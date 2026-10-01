@@ -52,7 +52,7 @@ ENV CXX_x86_64_pc_windows_gnu=x86_64-w64-mingw32-g++
 ENV AR_x86_64_pc_windows_gnu=x86_64-w64-mingw32-ar
 
 # Compile Windows Native Executable (.exe)
-RUN cargo build --manifest-path src-tauri/Cargo.toml --release --target x86_64-pc-windows-gnu || true
+RUN cargo build --manifest-path src-tauri/Cargo.toml --release --target x86_64-pc-windows-gnu
 
 # Stage 3: Export Artifacts Stage
 FROM scratch AS export-stage

@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # Service to build Windows .exe and export binaries to ./dist-windows
   build-windows-exe:
@@ -11,9 +9,16 @@ services:
       - ./dist-windows:/app/output
     command: >
       bash -c "
-        echo 'Compiling DevPulse Windows 11 Native binary...';
-        cargo build --manifest-path src-tauri/Cargo.toml --release --target x86_64-pc-windows-gnu;
-        mkdir -p /app/output;
-        cp src-tauri/target/x86_64-pc-windows-gnu/release/devpulse.exe /app/output/devpulse.exe 2>/dev/null || true;
-        echo 'Artifacts exported to ./dist-windows/devpulse.exe';
+        set -e
+        echo '==> Compiling DevPulse Windows 11 Native binary with Cargo...'
+        cargo build --manifest-path src-tauri/Cargo.toml --release --target x86_64-pc-windows-gnu
+        mkdir -p /app/output
+        if [ -f src-tauri/target/x86_64-pc-windows-gnu/release/devpulse.exe ]; then
+          cp src-tauri/target/x86_64-pc-windows-gnu/release/devpulse.exe /app/output/devpulse.exe
+          echo '==> SUCCESS! Windows executable exported to ./dist-windows/devpulse.exe'
+        else
+          echo '==> Searching target directory for generated binaries:'
+          find src-tauri/target/ -name '*.exe' -exec cp {} /app/output/ \;
+          echo '==> Export complete.'
+        fi
       "
