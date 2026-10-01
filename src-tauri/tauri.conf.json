@@ -12,31 +12,7 @@
   },
   "tauri": {
     "allowlist": {
-      "all": true,
-      "fs": {
-        "all": true,
-        "scope": ["$APPDATA/devpulse/*", "$RESOURCE/*"]
-      },
-      "shell": {
-        "all": true,
-        "open": true
-      },
-      "window": {
-        "all": true,
-        "setDecorations": true,
-        "setAlwaysOnTop": true,
-        "setResizable": true,
-        "setTitle": true
-      },
-      "systemTray": {
-        "all": true
-      },
-      "notification": {
-        "all": true
-      },
-      "clipboard": {
-        "all": true
-      }
+      "all": true
     },
     "bundle": {
       "active": true,
