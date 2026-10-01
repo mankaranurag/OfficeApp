@@ -8,9 +8,9 @@ WORKDIR /app
 # Set production environment
 ENV NODE_ENV=production
 
-# Install dependencies (without legacy-peer-deps, modern resolved tree)
+# Install dependencies (Node 24 latest)
 COPY package*.json ./
-RUN npm ci || npm install
+RUN npm install
 
 # Copy application source
 COPY . .
