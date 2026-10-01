@@ -4,6 +4,7 @@ export type WorkspaceTab =
   | 'github-activity'
   | 'schedule-deadlines'
   | 'history-search'
+  | 'system-docs'
   | 'settings-api-keys';
 
 export type OsMode = 'macos' | 'windows';

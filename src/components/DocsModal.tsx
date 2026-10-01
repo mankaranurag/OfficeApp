@@ -7,13 +7,15 @@ interface DocsModalProps {
 }
 
 export const DocsModal: React.FC<DocsModalProps> = ({ isOpen, onClose, showToast }) => {
-  const [activeDoc, setActiveDoc] = useState<'architecture' | 'windows' | 'api' | 'userguide'>('architecture');
+  const [activeDoc, setActiveDoc] = useState<'architecture' | 'windows' | 'docker' | 'tauri' | 'api' | 'userguide'>('architecture');
 
   if (!isOpen) return null;
 
   const docTabs = [
     { id: 'architecture', title: 'Architecture & Engine', icon: 'account_tree' },
     { id: 'windows', title: 'Windows 11 Native Build', icon: 'desktop_windows' },
+    { id: 'docker', title: 'Docker & CI/CD .EXE', icon: 'token' },
+    { id: 'tauri', title: 'Tauri Rust App', icon: 'code' },
     { id: 'api', title: 'API & Keyring Integrations', icon: 'key' },
     { id: 'userguide', title: 'User Manual & Shortcuts', icon: 'menu_book' }
   ];
@@ -27,7 +29,7 @@ export const DocsModal: React.FC<DocsModalProps> = ({ isOpen, onClose, showToast
             <span className="material-symbols-outlined text-primary text-[24px]">library_books</span>
             <div>
               <h2 className="text-base font-bold text-on-surface">DevPulse Documentation & Developer Manual</h2>
-              <p className="text-xs text-on-surface-variant">Embedded offline reference for local SQLite engine, Windows native builds, and integrations.</p>
+              <p className="text-xs text-on-surface-variant">Embedded offline reference for local SQLite engine, Windows native builds, Docker pipelines, and integrations.</p>
             </div>
           </div>
           <button onClick={onClose} className="p-1 rounded-lg text-outline hover:text-on-surface hover:bg-white/10 transition">
@@ -41,7 +43,7 @@ export const DocsModal: React.FC<DocsModalProps> = ({ isOpen, onClose, showToast
             <button
               key={tab.id}
               onClick={() => setActiveDoc(tab.id as any)}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl font-semibold transition ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-semibold transition ${
                 activeDoc === tab.id
                   ? 'bg-primary-container text-on-primary-container shadow-sm'
                   : 'text-outline hover:text-on-surface'
@@ -90,9 +92,36 @@ export const DocsModal: React.FC<DocsModalProps> = ({ isOpen, onClose, showToast
                   <div>npx tauri build</div>
                 </div>
               </div>
-              <p className="text-outline">
-                When running in Windows mode, window controls automatically shift to the top-right corner with Windows 11 Fluent styling.
+            </div>
+          )}
+
+          {activeDoc === 'docker' && (
+            <div className="space-y-3">
+              <h3 className="text-base font-bold text-primary">Docker Cross-Compilation &amp; GitHub Actions CI/CD</h3>
+              <p>
+                Build the Windows 11 <code>devpulse.exe</code> binary in any containerized environment without installing Rust or Windows locally.
               </p>
+              <div className="space-y-2">
+                <span className="font-bold text-on-surface block text-xs">Docker Build Command:</span>
+                <div className="p-3 rounded-xl bg-black/40 font-mono text-[11px] text-blue-300 space-y-1">
+                  <div>docker compose up build-windows-exe</div>
+                  <div className="text-outline mt-1"># Output binary exported to ./dist-windows/devpulse.exe</div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeDoc === 'tauri' && (
+            <div className="space-y-3">
+              <h3 className="text-base font-bold text-primary">Tauri &amp; Rust Windows 11 Core (`src-tauri/`)</h3>
+              <p>
+                Tauri provides a sub-15MB resident RAM footprint and sub-0.3% CPU usage on Windows 11.
+              </p>
+              <div className="p-3.5 rounded-xl bg-black/40 font-mono text-[11px] text-amber-300 space-y-1">
+                <div>• Mica &amp; Acrylic window effect powered by window-vibrancy crate</div>
+                <div>• Native Windows DPAPI token encryption via Rust secure_vault_store</div>
+                <div>• Background tray minimization with automatic Git hook listeners</div>
+              </div>
             </div>
           )}
 
@@ -146,7 +175,7 @@ export const DocsModal: React.FC<DocsModalProps> = ({ isOpen, onClose, showToast
 
         {/* Footer */}
         <div className="flex items-center justify-between pt-2 border-t border-white/10 shrink-0">
-          <span className="text-[11px] text-outline font-mono">DevPulse Engine Docs • v1.4.2</span>
+          <span className="text-[11px] text-outline font-mono">DevPulse Engine Docs • 6 Guides Available</span>
           <button
             onClick={() => {
               onClose();

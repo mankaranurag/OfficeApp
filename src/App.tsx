@@ -16,6 +16,7 @@ import { JiraStoriesView } from './views/JiraStoriesView';
 import { GitHubActivityView } from './views/GitHubActivityView';
 import { ScheduleDeadlinesView } from './views/ScheduleDeadlinesView';
 import { HistorySearchView } from './views/HistorySearchView';
+import { SystemDocsView } from './views/SystemDocsView';
 import { SettingsApiKeysView } from './views/SettingsApiKeysView';
 
 export default function App() {
@@ -360,6 +361,10 @@ export default function App() {
 
           {activeTab === 'history-search' && (
             <HistorySearchView showToast={showToast} />
+          )}
+
+          {activeTab === 'system-docs' && (
+            <SystemDocsView showToast={showToast} />
           )}
 
           {activeTab === 'settings-api-keys' && (

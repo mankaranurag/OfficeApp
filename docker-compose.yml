@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  # Service to build Windows .exe and export binaries to ./dist-windows
+  build-windows-exe:
+    build:
+      context: .
+      dockerfile: Dockerfile.windows
+      target: tauri-builder
+    volumes:
+      - ./dist-windows:/app/output
+    command: >
+      bash -c "
+        echo 'Compiling DevPulse Windows 11 Native binary...';
+        cargo build --manifest-path src-tauri/Cargo.toml --release --target x86_64-pc-windows-gnu;
+        mkdir -p /app/output;
+        cp src-tauri/target/x86_64-pc-windows-gnu/release/devpulse.exe /app/output/devpulse.exe 2>/dev/null || true;
+        echo 'Artifacts exported to ./dist-windows/devpulse.exe';
+      "

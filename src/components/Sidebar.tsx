@@ -30,6 +30,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { id: 'github-activity', label: 'GitHub Activity', icon: 'terminal', dot: true },
     { id: 'schedule-deadlines', label: 'Schedule & Deadlines', icon: 'calendar_clock', badge: 'Oct 26', badgeColor: 'bg-white/10 text-outline' },
     { id: 'history-search', label: 'History & Search', icon: 'manage_search', badge: '142', badgeColor: 'text-outline font-mono' },
+    { id: 'system-docs', label: 'Docs & Manuals', icon: 'menu_book', badge: '6 MD', badgeColor: 'bg-primary/20 text-primary' },
     { id: 'settings-api-keys', label: 'Settings & API Keys', icon: 'key' }
   ];
 

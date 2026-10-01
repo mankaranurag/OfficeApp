@@ -1,0 +1,21 @@
+[package]
+name = "devpulse"
+version = "1.4.2"
+description = "DevPulse — Windows 11 Developer Cockpit & Git/Jira Intelligence Companion"
+authors = ["DevPulse Engineering <team@devpulse.io>"]
+edition = "2021"
+
+[build-dependencies]
+tauri-build = { version = "1.5", features = [] }
+
+[dependencies]
+tauri = { version = "1.5", features = [ "window-all", "fs-all", "shell-all", "system-tray", "notification", "clipboard-all" ] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+rusqlite = { version = "0.31", features = ["bundled", "modern_sqlite"] }
+windows-vibrancy = "0.5.2"
+
+[features]
+# By default Tauri runs in production mode
+default = ["custom-protocol"]
+custom-protocol = ["tauri/custom-protocol"]
