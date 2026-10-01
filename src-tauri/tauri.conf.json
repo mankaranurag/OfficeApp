@@ -42,17 +42,12 @@
       "shortDescription": "DevPulse Windows 11 Developer Cockpit",
       "targets": ["msi", "nsis"],
       "windows": {
-        "certificateThumbprint": null,
         "digestAlgorithm": "sha256",
-        "timestampServer": "",
+        "nsis": {
+          "installMode": "currentUser"
+        },
         "wix": {
           "language": "en-US"
-        },
-        "nsis": {
-          "installerIcon": "icons/icon.ico",
-          "headerImage": "icons/header.bmp",
-          "sidebarImage": "icons/sidebar.bmp",
-          "installMode": "currentUser"
         }
       }
     },
@@ -77,12 +72,7 @@
         "minHeight": 700,
         "center": true,
         "decorations": false,
-        "transparent": true,
-        "windowEffects": {
-          "effects": ["acrylic", "mica"],
-          "state": "active",
-          "radius": 12
-        }
+        "transparent": true
       }
     ]
   }

@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a0d14"/>
+      <stop offset="50%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#020617"/>
+    </linearGradient>
+    <linearGradient id="cyanGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+    <linearGradient id="purpleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#a855f7"/>
+      <stop offset="100%" stop-color="#6366f1"/>
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b" stop-opacity="0.75"/>
+      <stop offset="100%" stop-color="#0f172a" stop-opacity="0.85"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Window Frame -->
+  <rect width="1200" height="675" rx="14" fill="url(#bgGrad)" stroke="#334155" stroke-width="1.5"/>
+
+  <!-- Title Bar -->
+  <rect x="0" y="0" width="1200" height="42" rx="14" fill="#090d16" fill-opacity="0.9"/>
+  <circle cx="24" cy="21" r="5.5" fill="#ef4444"/>
+  <circle cx="42" cy="21" r="5.5" fill="#eab308"/>
+  <circle cx="60" cy="21" r="5.5" fill="#22c55e"/>
+  <text x="500" y="26" fill="#94a3b8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="600" letter-spacing="1">DEVPULSE — WINDOWS 11 COCKPIT</text>
+
+  <!-- Sidebar -->
+  <rect x="18" y="56" width="220" height="600" rx="10" fill="url(#cardGrad)" stroke="#1e293b"/>
+  <text x="36" y="90" fill="#f8fafc" font-family="'Segoe UI', sans-serif" font-size="16" font-weight="700">⚡ DevPulse</text>
+  <rect x="36" y="110" width="184" height="34" rx="6" fill="#38bdf8" fill-opacity="0.15" stroke="#38bdf8" stroke-width="1"/>
+  <text x="50" y="132" fill="#38bdf8" font-family="'Segoe UI', sans-serif" font-size="13" font-weight="600">📊 Cockpit Dashboard</text>
+  <text x="50" y="172" fill="#94a3b8" font-family="'Segoe UI', sans-serif" font-size="13">📌 Kanban Sprint</text>
+  <text x="50" y="210" fill="#94a3b8" font-family="'Segoe UI', sans-serif" font-size="13">🐙 Git & PRs</text>
+  <text x="50" y="248" fill="#94a3b8" font-family="'Segoe UI', sans-serif" font-size="13">🎯 Jira Velocity</text>
+  <text x="50" y="286" fill="#94a3b8" font-family="'Segoe UI', sans-serif" font-size="13">⏱ Pomodoro Focus</text>
+  <text x="50" y="324" fill="#94a3b8" font-family="'Segoe UI', sans-serif" font-size="13">🔐 DPAPI Keyring</text>
+
+  <!-- Telemetry Widget in Sidebar -->
+  <rect x="30" y="520" width="196" height="120" rx="8" fill="#090d16" stroke="#1e293b"/>
+  <text x="42" y="542" fill="#64748b" font-family="'Segoe UI', sans-serif" font-size="10" font-weight="700" letter-spacing="1">ENGINE TELEMETRY</text>
+  <text x="42" y="568" fill="#22c55e" font-family="'Segoe UI', sans-serif" font-size="13" font-weight="700">● 14.8 MB RAM</text>
+  <text x="42" y="592" fill="#38bdf8" font-family="'Segoe UI', sans-serif" font-size="12">⚡ 0.4ms SQLite WAL</text>
+  <text x="42" y="616" fill="#a855f7" font-family="'Segoe UI', sans-serif" font-size="12">🔒 DPAPI Vault: ACTIVE</text>
+
+  <!-- Main Content Area: Metric Cards -->
+  <g transform="translate(254, 56)">
+    <!-- Card 1 -->
+    <rect x="0" y="0" width="220" height="96" rx="10" fill="url(#cardGrad)" stroke="#1e293b"/>
+    <text x="18" y="28" fill="#64748b" font-family="'Segoe UI', sans-serif" font-size="11" font-weight="600">SPRINT VELOCITY</text>
+    <text x="18" y="64" fill="#f8fafc" font-family="'Segoe UI', sans-serif" font-size="28" font-weight="800">42 pts</text>
+    <text x="18" y="84" fill="#22c55e" font-family="'Segoe UI', sans-serif" font-size="11">↑ 14% vs last sprint</text>
+
+    <!-- Card 2 -->
+    <rect x="236" y="0" width="220" height="96" rx="10" fill="url(#cardGrad)" stroke="#1e293b"/>
+    <text x="254" y="28" fill="#64748b" font-family="'Segoe UI', sans-serif" font-size="11" font-weight="600">OPEN PULL REQUESTS</text>
+    <text x="254" y="64" fill="#38bdf8" font-family="'Segoe UI', sans-serif" font-size="28" font-weight="800">7 Active</text>
+    <text x="254" y="84" fill="#94a3b8" font-family="'Segoe UI', sans-serif" font-size="11">2 pending review</text>
+
+    <!-- Card 3 -->
+    <rect x="472" y="0" width="220" height="96" rx="10" fill="url(#cardGrad)" stroke="#1e293b"/>
+    <text x="490" y="28" fill="#64748b" font-family="'Segoe UI', sans-serif" font-size="11" font-weight="600">FOCUS POMODORO</text>
+    <text x="490" y="64" fill="#a855f7" font-family="'Segoe UI', sans-serif" font-size="28" font-weight="800">4.5 hrs</text>
+    <text x="490" y="84" fill="#eab308" font-family="'Segoe UI', sans-serif" font-size="11">🔥 6 cycles completed</text>
+
+    <!-- Card 4 -->
+    <rect x="708" y="0" width="220" height="96" rx="10" fill="url(#cardGrad)" stroke="#1e293b"/>
+    <text x="726" y="28" fill="#64748b" font-family="'Segoe UI', sans-serif" font-size="11" font-weight="600">LOCAL SQLITE ENGINE</text>
+    <text x="726" y="64" fill="#22c55e" font-family="'Segoe UI', sans-serif" font-size="28" font-weight="800">100% OK</text>
+    <text x="726" y="84" fill="#22c55e" font-family="'Segoe UI', sans-serif" font-size="11">0 pending outbox syncs</text>
+  </g>
+
+  <!-- Kanban Preview Grid -->
+  <g transform="translate(254, 170)">
+    <!-- Column 1: TODO -->
+    <rect x="0" y="0" width="300" height="486" rx="10" fill="url(#cardGrad)" stroke="#1e293b"/>
+    <text x="18" y="32" fill="#94a3b8" font-family="'Segoe UI', sans-serif" font-size="13" font-weight="700">📋 TO DO (3)</text>
+    <rect x="14" y="50" width="272" height="90" rx="8" fill="#0f172a" stroke="#334155"/>
+    <text x="26" y="74" fill="#f8fafc" font-family="'Segoe UI', sans-serif" font-size="12" font-weight="600">PROJ-104: Windows 11 Acrylic Blur</text>
+    <text x="26" y="96" fill="#64748b" font-family="'Segoe UI', sans-serif" font-size="11">Frontend UI • High Priority</text>
+    <rect x="26" y="108" width="60" height="18" rx="4" fill="#ef4444" fill-opacity="0.2"/>
+    <text x="34" y="121" fill="#ef4444" font-family="'Segoe UI', sans-serif" font-size="10" font-weight="700">URGENT</text>
+
+    <!-- Column 2: IN PROGRESS -->
+    <rect x="314" y="0" width="300" height="486" rx="10" fill="url(#cardGrad)" stroke="#1e293b"/>
+    <text x="332" y="32" fill="#38bdf8" font-family="'Segoe UI', sans-serif" font-size="13" font-weight="700">⚡ IN PROGRESS (4)</text>
+    <rect x="328" y="50" width="272" height="100" rx="8" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5"/>
+    <text x="340" y="74" fill="#f8fafc" font-family="'Segoe UI', sans-serif" font-size="12" font-weight="600">PROJ-98: Offline SQLite WAL sync</text>
+    <text x="340" y="96" fill="#64748b" font-family="'Segoe UI', sans-serif" font-size="11">Tauri Rust Backend • In Review</text>
+    <rect x="340" y="112" width="80" height="18" rx="4" fill="#38bdf8" fill-opacity="0.2"/>
+    <text x="348" y="125" fill="#38bdf8" font-family="'Segoe UI', sans-serif" font-size="10" font-weight="700">IN PROGRESS</text>
+
+    <!-- Column 3: DONE -->
+    <rect x="628" y="0" width="300" height="486" rx="10" fill="url(#cardGrad)" stroke="#1e293b"/>
+    <text x="646" y="32" fill="#22c55e" font-family="'Segoe UI', sans-serif" font-size="13" font-weight="700">✅ COMPLETED (8)</text>
+    <rect x="642" y="50" width="272" height="90" rx="8" fill="#0f172a" stroke="#22c55e" stroke-opacity="0.4"/>
+    <text x="654" y="74" fill="#f8fafc" font-family="'Segoe UI', sans-serif" font-size="12" font-weight="600">PROJ-92: DPAPI Keyring encryption</text>
+    <text x="654" y="96" fill="#64748b" font-family="'Segoe UI', sans-serif" font-size="11">Security Module • Merged</text>
+    <rect x="654" y="108" width="50" height="18" rx="4" fill="#22c55e" fill-opacity="0.2"/>
+    <text x="662" y="121" fill="#22c55e" font-family="'Segoe UI', sans-serif" font-size="10" font-weight="700">DONE</text>
+  </g>
+</svg>
