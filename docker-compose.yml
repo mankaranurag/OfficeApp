@@ -21,4 +21,15 @@ services:
           find src-tauri/target/ -name '*.exe' -exec cp {} /app/output/ \;
           echo '==> Export complete.'
         fi
+        echo '==> Exporting WebView2Loader.dll (required by the GNU toolchain build)...'
+        loader=$$(find src-tauri/target/ /usr/local/cargo/registry -name 'WebView2Loader.dll' -path '*x64*' -print -quit)
+        if [ -z \"$$loader\" ]; then
+          loader=$$(find src-tauri/target/ /usr/local/cargo/registry -name 'WebView2Loader.dll' -print -quit)
+        fi
+        if [ -n \"$$loader\" ]; then
+          cp \"$$loader\" /app/output/WebView2Loader.dll
+          echo \"==> Copied $$loader\"
+        else
+          echo '==> WARNING: WebView2Loader.dll not found in the build tree.'
+        fi
       "
