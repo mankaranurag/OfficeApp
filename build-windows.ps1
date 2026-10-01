@@ -9,12 +9,12 @@ Write-Host "====================================================================
 Write-Host ""
 
 # 1. Environment Check
-Write-Host "[1/4] Verifying Node.js environment..." -ForegroundColor Yellow
+Write-Host "[1/4] Verifying Node.js 24 environment..." -ForegroundColor Yellow
 try {
     $nodeVersion = node -v
-    Write-Host "  Found Node.js $nodeVersion" -ForegroundColor Green
+    Write-Host "  Found Node.js $nodeVersion (Target: Node 24 Latest)" -ForegroundColor Green
 } catch {
-    Write-Error "Node.js is not installed. Please install Node.js 20+ from https://nodejs.org"
+    Write-Error "Node.js is not installed. Please install Node.js 24 from https://nodejs.org"
     exit 1
 }
 

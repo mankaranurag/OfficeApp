@@ -11,10 +11,10 @@ echo    Target Architectures: x64 / ARM64 Windows 11 (Fluent Acrylic / Mica)
 echo  ====================================================================
 echo.
 
-echo [1/4] Checking Node.js and NPM environment...
+echo [1/4] Checking Node.js 24 environment...
 node -v
 if %ERRORLEVEL% NEQ 0 (
-    echo [ERROR] Node.js is required. Please install Node.js 20+ from https://nodejs.org
+    echo [ERROR] Node.js 24+ is required. Please install Node.js 24 from https://nodejs.org
     exit /b 1
 )
 
