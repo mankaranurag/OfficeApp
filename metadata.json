@@ -1,0 +1,6 @@
+{
+  "name": "DevPulse — Developer Cockpit, Git & Jira Intelligence Companion",
+  "description": "Ultra-lightweight cross-platform developer task tracker, Git & Jira intelligence companion with Liquid Glassmorphism, 60fps velocity telemetry, and offline SQLite WAL cache.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
