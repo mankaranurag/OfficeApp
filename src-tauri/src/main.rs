@@ -2,6 +2,8 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use tauri::{CustomMenuItem, Manager, SystemTray, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem};
+
+#[cfg(target_os = "windows")]
 use window_vibrancy::{apply_acrylic, apply_mica};
 
 // Native command to trigger SQLite WAL checkpoint on Windows
@@ -65,8 +67,8 @@ fn main() {
 
             #[cfg(target_os = "windows")]
             {
-                // Apply Windows 11 Mica / Acrylic blur effect
-                if let Err(_) = apply_mica(&window, Some(true)) {
+                // Apply Windows 11 Mica / Acrylic blur effect using window-vibrancy 0.4 API
+                if let Err(_) = apply_mica(&window, None) {
                     let _ = apply_acrylic(&window, Some((17, 19, 23, 220)));
                 }
             }
