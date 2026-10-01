@@ -1,6 +1,7 @@
 # =========================================================================
 #  DevPulse — Windows 11 Native Executable Cross-Compilation Dockerfile
 #  Target: x86_64-pc-windows-gnu / NSIS Windows Installer (.exe / .msi)
+#  Base: Debian 12 (Bookworm) & Node.js 24 (Latest)
 # =========================================================================
 
 # Stage 1: Build Frontend Assets with Node 24 (Latest)
@@ -11,35 +12,32 @@ COPY src ./src
 RUN npm ci || npm install
 RUN npm run build
 
-# Stage 2: Tauri / Rust Windows Cross-Compilation
-FROM rust:1.80-bullseye AS tauri-builder
+# Stage 2: Tauri / Rust Windows Cross-Compilation (Debian 12 Bookworm)
+FROM rust:bookworm AS tauri-builder
 
-# Install MinGW Windows cross-compiler, NSIS, WebKit & dependencies
+# Install MinGW Windows cross-compiler, NSIS, and essential tools
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     curl \
     file \
-    libwebkit2gtk-4.0-dev \
-    libappindicator3-dev \
-    librsvg2-dev \
-    patchelf \
     mingw-w64 \
     nsis \
     libssl-dev \
     pkg-config \
+    ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Rust Windows target
 RUN rustup target add x86_64-pc-windows-gnu
 
-# Install Node.js 24 (Latest) for Tauri CLI
+# Install Node.js 24 (Latest)
 RUN curl -fsSL https://deb.nodesource.com/setup_24.x | bash - \
     && apt-get install -y nodejs \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-# Copy built frontend assets
+# Copy built frontend assets from Stage 1
 COPY --from=frontend-builder /app/dist ./dist
 COPY package*.json ./
 COPY src-tauri ./src-tauri
@@ -47,7 +45,7 @@ COPY src-tauri ./src-tauri
 # Install Tauri CLI
 RUN npm install -D @tauri-apps/cli
 
-# Configure Cargo for Windows GNU cross-compilation
+# Configure Cargo for Windows GNU cross-compilation with MinGW
 ENV PKG_CONFIG_ALLOW_CROSS=1
 ENV CC_x86_64_pc_windows_gnu=x86_64-w64-mingw32-gcc
 ENV CXX_x86_64_pc_windows_gnu=x86_64-w64-mingw32-g++

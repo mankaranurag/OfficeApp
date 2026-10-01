@@ -1,5 +1,5 @@
 {
-  "summary":  "Guide and execution instructions for compiling the DevPulse Windows 11 executable (.exe) using Docker and GitHub Actions CI/CD.",
-  "updatedAt":  "2026-10-01T06:10:10.076013528Z",
+  "summary":  "Updated Docker & CI/CD guide for Windows 11 executable cross-compilation with Debian 12 Bookworm and Node 24 latest.",
+  "updatedAt":  "2026-10-01T06:44:15.557981143Z",
   "userFacing":  true
 }

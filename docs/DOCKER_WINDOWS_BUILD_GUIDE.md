@@ -1,6 +1,6 @@
 # DevPulse — Docker & CI/CD Windows 11 Build Manual
 
-This guide covers building the **DevPulse Windows 11 native desktop `.exe`** using Docker container cross-compilation or GitHub Actions.
+This guide covers building the **DevPulse Windows 11 native desktop `.exe`** using Docker container cross-compilation (Debian 12 Bookworm & Node 24 Latest) or GitHub Actions.
 
 ---
 
@@ -27,7 +27,7 @@ The compiled Windows binary will be placed inside `./dist-windows/devpulse.exe`.
 
 ## Method 2: Automated GitHub Actions CI/CD (`.github/workflows/build-windows.yml`)
 
-DevPulse includes an automated GitHub Actions workflow configured for `windows-latest`.
+DevPulse includes an automated GitHub Actions workflow configured for `windows-latest` with Node 24.
 
 Whenever you push to GitHub:
 1. GitHub spins up a native Windows 11 VM with MSVC & Rust.
