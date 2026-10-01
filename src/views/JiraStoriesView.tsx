@@ -3,6 +3,8 @@ import { JiraStory } from '../types';
 
 interface JiraStoriesViewProps {
   story: JiraStory;
+  stories: JiraStory[];
+  onSelectStory: (key: string) => void;
   onUpdateStoryStatus: (status: 'backlog' | 'in-progress' | 'code-review' | 'done') => void;
   onToggleAC: (id: string) => void;
   onAddComment: (text: string) => void;
@@ -13,6 +15,8 @@ interface JiraStoriesViewProps {
 
 export const JiraStoriesView: React.FC<JiraStoriesViewProps> = ({
   story,
+  stories,
+  onSelectStory,
   onUpdateStoryStatus,
   onToggleAC,
   onAddComment,
@@ -23,6 +27,7 @@ export const JiraStoriesView: React.FC<JiraStoriesViewProps> = ({
   const [newComment, setNewComment] = useState('');
   const [isSyncingJira, setIsSyncingJira] = useState(false);
   const [activeTab, setActiveTab] = useState<'comments' | 'worklog' | 'history'>('comments');
+  const [showStoryDropdown, setShowStoryDropdown] = useState(false);
 
   const verifiedACs = story.acceptanceCriteria.filter(ac => ac.verified).length;
   const totalACs = story.acceptanceCriteria.length;
@@ -32,7 +37,7 @@ export const JiraStoriesView: React.FC<JiraStoriesViewProps> = ({
     if (!newComment.trim()) return;
     onAddComment(newComment.trim());
     setNewComment('');
-    showToast('Comment posted to Jira Cloud & linked to CORE-1042');
+    showToast(`Comment posted to Jira Cloud & linked to ${story.key}`);
   };
 
   const handleMentionInsert = (text: string) => {
@@ -44,7 +49,7 @@ export const JiraStoriesView: React.FC<JiraStoriesViewProps> = ({
     showToast('Syncing with Jira Cloud REST API (v3)...');
     setTimeout(() => {
       setIsSyncingJira(false);
-      showToast('Jira Cloud synced: Board 42 & CORE-1042 updated.');
+      showToast(`Jira Cloud synced: Board 42 & ${story.key} updated.`);
     }, 1200);
   };
 
@@ -61,17 +66,51 @@ export const JiraStoriesView: React.FC<JiraStoriesViewProps> = ({
         <div className="absolute -top-24 -left-12 w-96 h-48 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
         <div className="absolute -top-20 right-10 w-80 h-36 bg-purple-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
-        {/* Top Row: Breadcrumb & Meta Actions */}
+        {/* Top Row: Breadcrumb & Story Switcher */}
         <div className="flex flex-wrap items-center justify-between gap-3 relative z-10">
-          <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-outline font-mono">
-            <span className="hover:text-on-surface transition-colors cursor-pointer">DevPulse</span>
-            <span>/</span>
-            <span className="hover:text-on-surface transition-colors cursor-pointer">CORE Project</span>
-            <span>/</span>
-            <span className="hover:text-on-surface transition-colors cursor-pointer">SPRINT-42</span>
-            <span>/</span>
-            <span className="text-primary font-bold">{story.key}</span>
-          </nav>
+          <div className="flex items-center gap-2">
+            <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-outline font-mono">
+              <span className="hover:text-on-surface transition-colors cursor-pointer">DevPulse</span>
+              <span>/</span>
+              <span className="hover:text-on-surface transition-colors cursor-pointer">CORE Project</span>
+              <span>/</span>
+              <span className="hover:text-on-surface transition-colors cursor-pointer">SPRINT-42</span>
+              <span>/</span>
+            </nav>
+
+            {/* Story Picker Dropdown */}
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setShowStoryDropdown(!showStoryDropdown)}
+                className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-surface-container-high text-primary font-bold font-mono text-xs hover:bg-surface-container-highest transition"
+              >
+                <span>{story.key}</span>
+                <span className="material-symbols-outlined text-[14px]">arrow_drop_down</span>
+              </button>
+
+              {showStoryDropdown && (
+                <div className="absolute top-full left-0 mt-1 w-64 glass-card rounded-2xl shadow-2xl p-1.5 z-40 border border-white/15 animate-fade-in space-y-1">
+                  {stories.map(s => (
+                    <button
+                      key={s.key}
+                      onClick={() => {
+                        onSelectStory(s.key);
+                        setShowStoryDropdown(false);
+                        showToast(`Switched active story to: ${s.key}`);
+                      }}
+                      className={`w-full text-left p-2 rounded-xl text-xs flex items-center justify-between transition ${
+                        s.key === story.key ? 'bg-primary-container text-on-primary-container font-bold' : 'text-on-surface-variant hover:bg-white/10 hover:text-on-surface'
+                      }`}
+                    >
+                      <span className="font-mono">{s.key}</span>
+                      <span className="text-[10px] font-medium truncate max-w-[120px]">{s.title}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
 
           <div className="flex items-center gap-2">
             <button
@@ -86,7 +125,7 @@ export const JiraStoriesView: React.FC<JiraStoriesViewProps> = ({
             </button>
             <button
               type="button"
-              onClick={() => showToast('Shared Jira Story link to team channel')}
+              onClick={() => showToast(`Shared Jira Story link for ${story.key}`)}
               className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-surface-container-high/80 hover:bg-surface-container-highest text-on-surface text-xs font-medium transition"
             >
               <span className="material-symbols-outlined text-[16px]">share</span>
@@ -120,7 +159,7 @@ export const JiraStoriesView: React.FC<JiraStoriesViewProps> = ({
           <div className="flex items-center gap-2 shrink-0 self-start lg:self-center">
             <button
               type="button"
-              onClick={() => showToast('Assigned story to @Alex Rivera')}
+              onClick={() => showToast(`Assigned ${story.key} to @Alex Rivera`)}
               className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-surface-container-high hover:bg-surface-container-highest text-on-surface text-xs font-semibold shadow-sm transition"
             >
               <span className="material-symbols-outlined text-[16px] text-primary">account_circle</span>
@@ -128,7 +167,7 @@ export const JiraStoriesView: React.FC<JiraStoriesViewProps> = ({
             </button>
             <button
               type="button"
-              onClick={() => showToast('Jira Story attributes updated')}
+              onClick={() => showToast(`Jira Story ${story.key} updated & synced`)}
               className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-primary-container text-on-primary-container text-xs font-bold shadow-md hover:brightness-110 active:scale-95 transition"
             >
               <span className="material-symbols-outlined text-[16px]">save</span>
@@ -156,7 +195,7 @@ export const JiraStoriesView: React.FC<JiraStoriesViewProps> = ({
                     type="button"
                     onClick={() => {
                       onUpdateStoryStatus(statusKey);
-                      showToast(`Updated status to: ${labels[statusKey]}`);
+                      showToast(`Updated ${story.key} status to: ${labels[statusKey]}`);
                     }}
                     className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${
                       isCurrent
@@ -598,7 +637,7 @@ export const JiraStoriesView: React.FC<JiraStoriesViewProps> = ({
 
             <button
               type="button"
-              onClick={() => showToast('Search & link PR / commit dialog spawned')}
+              onClick={() => showToast(`Search & link PR / commit dialog spawned for ${story.key}`)}
               className="w-full py-2 rounded-xl bg-surface-container-lowest/60 hover:bg-surface-container-high text-primary text-xs font-semibold transition flex items-center justify-center gap-1.5"
             >
               <span className="material-symbols-outlined text-[16px]">add_link</span>

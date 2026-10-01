@@ -6,6 +6,8 @@ export type WorkspaceTab =
   | 'history-search'
   | 'settings-api-keys';
 
+export type OsMode = 'macos' | 'windows';
+
 export interface Task {
   id: string;
   title: string;
@@ -24,6 +26,7 @@ export interface Task {
   isRestored?: boolean;
   status?: 'active' | 'in-progress' | 'completed';
   notes?: string;
+  scheduledDate?: string;
 }
 
 export interface AcceptanceCriterion {

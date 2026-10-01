@@ -5,6 +5,8 @@ interface SidebarProps {
   activeTab: WorkspaceTab;
   onSelectTab: (tab: WorkspaceTab) => void;
   onOpenPreferences: () => void;
+  onOpenDocs: () => void;
+  onOpenWindowsBuild: () => void;
   onFilterTag: (tag: string) => void;
   activeFilterTag: string | null;
   ramUsage: string;
@@ -15,6 +17,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   activeTab,
   onSelectTab,
   onOpenPreferences,
+  onOpenDocs,
+  onOpenWindowsBuild,
   onFilterTag,
   activeFilterTag,
   ramUsage,
@@ -117,6 +121,27 @@ export const Sidebar: React.FC<SidebarProps> = ({
             })}
           </div>
         </div>
+
+        {/* Quick Developer Centers */}
+        <div className="px-2 space-y-1.5">
+          <div className="text-[11px] font-bold uppercase tracking-wider text-outline mb-1">
+            Tools &amp; Distribution
+          </div>
+          <button
+            onClick={onOpenWindowsBuild}
+            className="w-full flex items-center gap-2 p-2 rounded-xl bg-surface-container-low/60 hover:bg-surface-container-high text-on-surface text-xs font-medium border border-white/5 transition"
+          >
+            <span className="material-symbols-outlined text-[16px] text-secondary">desktop_windows</span>
+            <span>Windows 11 Build Hub</span>
+          </button>
+          <button
+            onClick={onOpenDocs}
+            className="w-full flex items-center gap-2 p-2 rounded-xl bg-surface-container-low/60 hover:bg-surface-container-high text-on-surface text-xs font-medium border border-white/5 transition"
+          >
+            <span className="material-symbols-outlined text-[16px] text-primary">menu_book</span>
+            <span>Architecture &amp; Docs</span>
+          </button>
+        </div>
       </div>
 
       {/* Sidebar Footer Diagnostics & Preferences */}
@@ -140,7 +165,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <span className="font-mono text-on-surface font-semibold">{ramUsage}</span>
           </div>
           <div className="w-full bg-black/30 rounded-full h-1.5 overflow-hidden">
-            <div className="bg-primary-container h-1.5 rounded-full w-[14%]"></div>
+            <div className="bg-primary-container h-full w-[14%]"></div>
           </div>
         </div>
 

@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { WorkspaceTab, Task, JiraStory, GitEvent } from './types';
-import { INITIAL_TASKS, MOCK_JIRA_STORY, MOCK_GIT_EVENTS } from './data/mockData';
+import { WorkspaceTab, Task, JiraStory, GitEvent, OsMode } from './types';
+import { INITIAL_TASKS, MOCK_JIRA_STORIES, MOCK_GIT_EVENTS } from './data/mockData';
 import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
 import { Toast } from './components/Toast';
 import { DiffReviewModal } from './components/DiffReviewModal';
 import { PreferencesModal } from './components/PreferencesModal';
 import { LogWorkTimeModal } from './components/LogWorkTimeModal';
+import { DocsModal } from './components/DocsModal';
+import { WindowsBuildModal } from './components/WindowsBuildModal';
+import { DryMigrationModal } from './components/DryMigrationModal';
 
 import { TodaysTasksView } from './views/TodaysTasksView';
 import { JiraStoriesView } from './views/JiraStoriesView';
@@ -18,6 +21,7 @@ import { SettingsApiKeysView } from './views/SettingsApiKeysView';
 export default function App() {
   const [activeTab, setActiveTab] = useState<WorkspaceTab>('todays-tasks');
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+  const [osMode, setOsMode] = useState<OsMode>('macos');
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [ramUsage, setRamUsage] = useState('18.4 MB');
   const [isSyncing, setIsSyncing] = useState(false);
@@ -27,11 +31,17 @@ export default function App() {
   const [isDiffReviewOpen, setIsDiffReviewOpen] = useState(false);
   const [isPreferencesOpen, setIsPreferencesOpen] = useState(false);
   const [isLogWorkTimeOpen, setIsLogWorkTimeOpen] = useState(false);
+  const [isDocsOpen, setIsDocsOpen] = useState(false);
+  const [isWindowsBuildOpen, setIsWindowsBuildOpen] = useState(false);
+  const [isDryMigrationOpen, setIsDryMigrationOpen] = useState(false);
 
   // Data state
   const [tasks, setTasks] = useState<Task[]>(INITIAL_TASKS);
-  const [jiraStory, setJiraStory] = useState<JiraStory>(MOCK_JIRA_STORY);
-  const [gitEvents] = useState<GitEvent[]>(MOCK_GIT_EVENTS);
+  const [stories, setStories] = useState<JiraStory[]>(MOCK_JIRA_STORIES);
+  const [activeStoryKey, setActiveStoryKey] = useState<string>('CORE-1042');
+  const [gitEvents, setGitEvents] = useState<GitEvent[]>(MOCK_GIT_EVENTS);
+
+  const activeStory = stories.find(s => s.key === activeStoryKey) || stories[0];
 
   // Apply theme class to root
   useEffect(() => {
@@ -45,7 +55,7 @@ export default function App() {
     }
   }, [theme]);
 
-  // Global Keyboard Shortcuts (⌘K, ⌘N, ⌘G)
+  // Global Keyboard Shortcuts (⌘K, ⌘N, ⌘G, ⌘S, Esc)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
@@ -76,6 +86,20 @@ export default function App() {
         handleAddTask('PR #492: Integrate low-power background telemetry parser', '#core-engine', 'Expires 6:00 PM');
         showToast('Spawned tracked task from Git commit (⌘G)!');
       }
+
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 's') {
+        e.preventDefault();
+        handleManualSync();
+      }
+
+      if (e.key === 'Escape') {
+        setIsDiffReviewOpen(false);
+        setIsPreferencesOpen(false);
+        setIsLogWorkTimeOpen(false);
+        setIsDocsOpen(false);
+        setIsWindowsBuildOpen(false);
+        setIsDryMigrationOpen(false);
+      }
     };
 
     window.addEventListener('keydown', handleKeyDown);
@@ -89,6 +113,29 @@ export default function App() {
     }, 3200);
   };
 
+  // Automated GitHub & SQLite Sync pipeline
+  const pushGitSyncEvent = (title: string, branch: string = 'main', type: 'commit' | 'pr' | 'branch' = 'commit') => {
+    const randomSha = Math.random().toString(16).substring(2, 9);
+    const newEvent: GitEvent = {
+      id: 'git-dyn-' + Date.now(),
+      type,
+      author: {
+        name: 'Alex Rivera',
+        avatar: 'https://lh3.googleusercontent.com/aida/AEtjO1UXkE8QnEcgagLcItFqZG_e1ol7DiCr3syePWIDGlh72kKAvYDCXEVvI4jZ4C7DhwNY0B1bSDxkvXEQFmfVHpfGzZNkMnvbhY3CMjSTyNtG5yVP183PfuTT0IgFmw3Xirc5woV7GLCWBcqkKn3_fGtPP4fv9FBmKNNOqLrp4BZQ7Cs28a_gLlS4IfGblvp309U2BMx5WjReF3NQ2iM0A_Zz147SI2XvefaS7nwZwBm3D52l-kZD49yjkus3'
+      },
+      branch,
+      time: 'Just now',
+      sha: randomSha,
+      title,
+      description: 'Synchronized via DevPulse SQLite WAL auto-journal daemon.',
+      additions: Math.floor(Math.random() * 80) + 10,
+      deletions: Math.floor(Math.random() * 20) + 2,
+      filesCount: 2,
+      isGpgSigned: true
+    };
+    setGitEvents(prev => [newEvent, ...prev]);
+  };
+
   const handleManualSync = () => {
     setIsSyncing(true);
     showToast('Polling GitHub API & vacuuming local SQLite WAL cache...');
@@ -97,6 +144,7 @@ export default function App() {
       setIsSyncing(false);
       const newRam = (18.1 + Math.random() * 0.5).toFixed(1) + ' MB';
       setRamUsage(newRam);
+      pushGitSyncEvent('chore(sync): manual WAL checkpoint & git index flush', 'main');
       showToast(`Sync complete! SQLite cache validated at ${newRam} resident footprint.`);
     }, 1200);
   };
@@ -109,6 +157,9 @@ export default function App() {
           const newCompleted = !t.completed;
           const now = new Date();
           const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          if (newCompleted) {
+            pushGitSyncEvent(`feat(task): complete and verify "${t.title.substring(0, 30)}"`, 'feature/sprint-42');
+          }
           return {
             ...t,
             completed: newCompleted,
@@ -131,28 +182,41 @@ export default function App() {
       expiry,
       estTime: 'Est: 45m',
       status: 'active',
-      isUrgent: expiry.includes('6:00') || expiry.includes('3:00')
+      isUrgent: expiry.includes('6:00') || expiry.includes('3:00'),
+      scheduledDate: '26'
     };
     setTasks(prev => [newTask, ...prev]);
+    pushGitSyncEvent(`task(create): new item "${title.substring(0, 28)}"`, 'feature/sprint-42');
   };
 
   const handleConvertGitToTask = (title: string, sha: string) => {
-    handleAddTask(`Review & Verify: ${title}`, '#core-engine', 'Expires 6:00 PM');
+    handleAddTask(`Review & Verify: ${title} (${sha})`, '#core-engine', 'Expires 6:00 PM');
     setActiveTab('todays-tasks');
   };
 
   // Jira Story Handlers
   const handleUpdateStoryStatus = (status: 'backlog' | 'in-progress' | 'code-review' | 'done') => {
-    setJiraStory(prev => ({ ...prev, status }));
+    setStories(prev =>
+      prev.map(s => (s.key === activeStoryKey ? { ...s, status } : s))
+    );
+    pushGitSyncEvent(`jira(${activeStoryKey}): transition status to ${status}`, activeStory.githubBranch);
   };
 
   const handleToggleAC = (id: string) => {
-    setJiraStory(prev => ({
-      ...prev,
-      acceptanceCriteria: prev.acceptanceCriteria.map(ac =>
-        ac.id === id ? { ...ac, verified: !ac.verified } : ac
-      )
-    }));
+    setStories(prev =>
+      prev.map(s => {
+        if (s.key === activeStoryKey) {
+          return {
+            ...s,
+            acceptanceCriteria: s.acceptanceCriteria.map(ac =>
+              ac.id === id ? { ...ac, verified: !ac.verified } : ac
+            )
+          };
+        }
+        return s;
+      })
+    );
+    pushGitSyncEvent(`test(${activeStoryKey}): toggle acceptance criterion verification`, activeStory.githubBranch);
   };
 
   const handleAddComment = (text: string) => {
@@ -164,21 +228,37 @@ export default function App() {
       time: 'Just now',
       text
     };
-    setJiraStory(prev => ({
-      ...prev,
-      comments: [...prev.comments, newComm]
-    }));
+    setStories(prev =>
+      prev.map(s => {
+        if (s.key === activeStoryKey) {
+          return {
+            ...s,
+            comments: [...s.comments, newComm]
+          };
+        }
+        return s;
+      })
+    );
+    pushGitSyncEvent(`comment(${activeStoryKey}): ${text.substring(0, 30)}...`, activeStory.githubBranch);
   };
 
   const handleLogWorkTime = (hours: number, note: string) => {
-    setJiraStory(prev => ({
-      ...prev,
-      timeTracking: {
-        ...prev.timeTracking,
-        logged: prev.timeTracking.logged + hours
-      }
-    }));
-    showToast(`Logged ${hours}h on CORE-1042: "${note || 'Development update'}"`);
+    setStories(prev =>
+      prev.map(s => {
+        if (s.key === activeStoryKey) {
+          return {
+            ...s,
+            timeTracking: {
+              ...s.timeTracking,
+              logged: s.timeTracking.logged + hours
+            }
+          };
+        }
+        return s;
+      })
+    );
+    pushGitSyncEvent(`time(${activeStoryKey}): logged ${hours}h work`, activeStory.githubBranch);
+    showToast(`Logged ${hours}h on ${activeStoryKey}: "${note || 'Development update'}"`);
   };
 
   const handleFilterTag = (tag: string) => {
@@ -195,6 +275,7 @@ export default function App() {
     const name = window.prompt('Enter new workspace name: (e.g. Core Engine, Release v1.5, QA Sandbox)');
     if (name) {
       showToast(`Created new workspace: "${name}"`);
+      pushGitSyncEvent(`workspace(init): create workspace "${name}"`, 'main');
     }
   };
 
@@ -203,14 +284,18 @@ export default function App() {
       {/* Toast Notification */}
       <Toast message={toastMessage} />
 
-      {/* Top macOS Navigation Header */}
+      {/* Top Navigation Header (macOS & Windows 11 Chrome support) */}
       <Header
         theme={theme}
         onToggleTheme={setTheme}
+        osMode={osMode}
+        onToggleOsMode={setOsMode}
         onManualSync={handleManualSync}
         isSyncing={isSyncing}
         ramUsage={ramUsage}
         onOpenPreferences={() => setIsPreferencesOpen(true)}
+        onOpenDocs={() => setIsDocsOpen(true)}
+        onOpenWindowsBuild={() => setIsWindowsBuildOpen(true)}
         showToast={showToast}
       />
 
@@ -221,6 +306,8 @@ export default function App() {
           activeTab={activeTab}
           onSelectTab={setActiveTab}
           onOpenPreferences={() => setIsPreferencesOpen(true)}
+          onOpenDocs={() => setIsDocsOpen(true)}
+          onOpenWindowsBuild={() => setIsWindowsBuildOpen(true)}
           onFilterTag={handleFilterTag}
           activeFilterTag={activeFilterTag}
           ramUsage={ramUsage}
@@ -242,7 +329,9 @@ export default function App() {
 
           {activeTab === 'jira-stories' && (
             <JiraStoriesView
-              story={jiraStory}
+              story={activeStory}
+              stories={stories}
+              onSelectStory={setActiveStoryKey}
               onUpdateStoryStatus={handleUpdateStoryStatus}
               onToggleAC={handleToggleAC}
               onAddComment={handleAddComment}
@@ -263,7 +352,10 @@ export default function App() {
           )}
 
           {activeTab === 'schedule-deadlines' && (
-            <ScheduleDeadlinesView showToast={showToast} />
+            <ScheduleDeadlinesView 
+              showToast={showToast} 
+              onOpenDryMigration={() => setIsDryMigrationOpen(true)}
+            />
           )}
 
           {activeTab === 'history-search' && (
@@ -282,6 +374,7 @@ export default function App() {
         onClose={() => setIsDiffReviewOpen(false)}
         onApprove={() => {
           setIsDiffReviewOpen(false);
+          pushGitSyncEvent('review(approve): PR #88 signed off by Alex Rivera', 'feat/sqlite-wal', 'pr');
           showToast('Signed off & approved PR #88 — Core Memory Sandbox Pipeline!');
         }}
         onSnooze={() => {
@@ -303,6 +396,26 @@ export default function App() {
         isOpen={isLogWorkTimeOpen}
         onClose={() => setIsLogWorkTimeOpen(false)}
         onLogTime={handleLogWorkTime}
+      />
+
+      <DocsModal
+        isOpen={isDocsOpen}
+        onClose={() => setIsDocsOpen(false)}
+        showToast={showToast}
+      />
+
+      <WindowsBuildModal
+        isOpen={isWindowsBuildOpen}
+        onClose={() => setIsWindowsBuildOpen(false)}
+        osMode={osMode}
+        onToggleOsMode={setOsMode}
+        showToast={showToast}
+      />
+
+      <DryMigrationModal
+        isOpen={isDryMigrationOpen}
+        onClose={() => setIsDryMigrationOpen(false)}
+        showToast={showToast}
       />
     </div>
   );

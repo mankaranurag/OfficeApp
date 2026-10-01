@@ -4,9 +4,13 @@ import { SCHEDULE_DAYS } from '../data/mockData';
 
 interface ScheduleDeadlinesViewProps {
   showToast: (msg: string) => void;
+  onOpenDryMigration: () => void;
 }
 
-export const ScheduleDeadlinesView: React.FC<ScheduleDeadlinesViewProps> = ({ showToast }) => {
+export const ScheduleDeadlinesView: React.FC<ScheduleDeadlinesViewProps> = ({ 
+  showToast,
+  onOpenDryMigration
+}) => {
   const [days] = useState<ScheduleDay[]>(SCHEDULE_DAYS);
   const [selectedDayNumber, setSelectedDayNumber] = useState<number>(26);
   const [futureTaskTitle, setFutureTaskTitle] = useState('Run automated load balancer stress benchmark');
@@ -165,15 +169,15 @@ export const ScheduleDeadlinesView: React.FC<ScheduleDeadlinesViewProps> = ({ sh
                 <div className="flex items-center gap-2">
                   <button
                     type="button"
-                    onClick={() => showToast('Dry migration execution complete: 0 schema collisions.')}
-                    className="px-3.5 py-1.5 rounded-xl bg-surface-container-high hover:bg-surface-container-highest text-on-surface text-xs font-semibold transition flex items-center gap-1"
+                    onClick={onOpenDryMigration}
+                    className="px-3.5 py-1.5 rounded-xl bg-surface-container-high hover:bg-surface-container-highest text-on-surface text-xs font-semibold transition flex items-center gap-1 shadow-sm"
                   >
                     <span className="material-symbols-outlined text-[14px]">terminal</span>
                     <span>Run Dry Migration</span>
                   </button>
                   <button
                     type="button"
-                    onClick={() => showToast('Staging deployment authorized.')}
+                    onClick={() => showToast('Staging deployment authorized for production roll-out!')}
                     className="px-4 py-1.5 rounded-xl bg-primary-container hover:brightness-110 text-on-primary-container text-xs font-bold transition shadow-sm flex items-center gap-1"
                   >
                     <span className="material-symbols-outlined text-[14px]">rocket_launch</span>

@@ -13,7 +13,8 @@ export const INITIAL_TASKS: Task[] = [
     estTime: 'Est: 45m',
     isUrgent: true,
     status: 'active',
-    author: 'Alex Rivera'
+    author: 'Alex Rivera',
+    scheduledDate: '26'
   },
   {
     id: 'task-2',
@@ -26,7 +27,8 @@ export const INITIAL_TASKS: Task[] = [
     estTime: 'Est: 20m',
     isUrgent: true,
     status: 'active',
-    author: 'CI Runner #419'
+    author: 'CI Runner #419',
+    scheduledDate: '26'
   },
   // Active in Sprint Queue
   {
@@ -40,7 +42,8 @@ export const INITIAL_TASKS: Task[] = [
     branch: 'spec/telemetry-api',
     author: 'Alex Rivera',
     issueId: '#1092',
-    notes: 'Coordinate schema types with frontend types generator. Ensure backwards compatibility with older macOS DevPulse clients (v1.3.x).'
+    notes: 'Coordinate schema types with frontend types generator. Ensure backwards compatibility with older macOS DevPulse clients (v1.3.x).',
+    scheduledDate: '26'
   },
   {
     id: 'task-4',
@@ -50,7 +53,8 @@ export const INITIAL_TASKS: Task[] = [
     tagType: 'infra',
     estTime: 'Est: 30m',
     status: 'in-progress',
-    author: 'Alex Rivera'
+    author: 'Alex Rivera',
+    scheduledDate: '26'
   },
   // Completed Today
   {
@@ -61,7 +65,8 @@ export const INITIAL_TASKS: Task[] = [
     duration: '18m',
     tag: 'Done',
     tagType: 'other',
-    status: 'completed'
+    status: 'completed',
+    scheduledDate: '26'
   },
   {
     id: 'task-6',
@@ -71,7 +76,8 @@ export const INITIAL_TASKS: Task[] = [
     duration: '25m',
     tag: 'Done',
     tagType: 'other',
-    status: 'completed'
+    status: 'completed',
+    scheduledDate: '26'
   },
   {
     id: 'task-7',
@@ -81,113 +87,168 @@ export const INITIAL_TASKS: Task[] = [
     duration: '24m',
     tag: 'Done',
     tagType: 'other',
-    status: 'completed'
+    status: 'completed',
+    scheduledDate: '26'
   }
 ];
 
-export const MOCK_JIRA_STORY: JiraStory = {
-  key: 'CORE-1042',
-  title: 'Implement SQLite WAL Mode & In-Memory Cache Tier for Sandbox Engine',
-  status: 'in-progress',
-  priority: 'High Priority (P1)',
-  storyPoints: 5,
-  description: 'Transition Core Engine local persistence layer from CoreData/disk-bound storage to lightweight SQLite with WAL (Write-Ahead Logging) mode to maintain resident memory strictly under 20MB during rapid git diff streaming and high-frequency AST token updates.',
-  acceptanceCriteria: [
-    {
-      id: 'ac-1',
-      text: 'SQLite connection pool restricted to max 2 threads with mutex locks to eliminate IPC starvation.',
-      verified: true,
-      badge: 'Verified'
-    },
-    {
-      id: 'ac-2',
-      text: 'WAL checkpointing runs asynchronously in daemon thread every 60s without blocking UI render loop.',
-      verified: true,
-      badge: 'Verified'
-    },
-    {
-      id: 'ac-3',
-      text: 'Benchmarks verify < 15MB base resident memory footprint under simulation of 1,000 cached commits.',
-      verified: false,
-      badge: 'Pending Diff'
-    },
-    {
-      id: 'ac-4',
-      text: 'Unit tests for multi-process lock contention pass reliably on both macOS Sequoia and Windows 11 sandbox environments.',
-      verified: false,
-      badge: 'In Review'
-    }
-  ],
-  assignee: {
-    name: 'Alex Rivera',
-    avatar: 'https://lh3.googleusercontent.com/aida/AEtjO1UXkE8QnEcgagLcItFqZG_e1ol7DiCr3syePWIDGlh72kKAvYDCXEVvI4jZ4C7DhwNY0B1bSDxkvXEQFmfVHpfGzZNkMnvbhY3CMjSTyNtG5yVP183PfuTT0IgFmw3Xirc5woV7GLCWBcqkKn3_fGtPP4fv9FBmKNNOqLrp4BZQ7Cs28a_gLlS4IfGblvp309U2BMx5WjReF3NQ2iM0A_Zz147SI2XvefaS7nwZwBm3D52l-kZD49yjkus3',
-    role: 'Staff Engineer / Assignee'
-  },
-  reporter: {
-    name: 'Sarah Chen',
-    avatar: 'https://lh3.googleusercontent.com/aida/AEtjO1XIhTzY3eUe08iU9h0fR4lC7-FjQ46i4H_8P0Gj3oPzRjP7sYk=s96-c'
-  },
-  sprint: 'Sprint 42',
-  sprintDaysRemaining: 4,
-  epic: 'EPIC-12: Core Performance',
-  components: ['#core-engine', '#sqlite', '#caching'],
-  fixVersion: 'v1.4.2-rc',
-  timeTracking: {
-    logged: 14,
-    estimated: 20
-  },
-  githubBranch: 'git/feature/sqlite-wal',
-  pullRequest: {
-    id: 'PR #88',
-    title: 'PR #88 — Core Memory Sandbox Pipeline',
-    checks: '4/4 checks passed',
-    target: 'main',
-    commitsCount: 6,
-    additions: 428,
-    deletions: 84
-  },
-  recentCommits: [
-    {
-      sha: '3a9f1b2',
-      message: 'Fix memory leak in SwiftUI Table View cell reuse during streaming',
-      time: '18m ago'
-    },
-    {
-      sha: '9d84c01',
-      message: 'Sign and notarize macOS build binaries for staging release',
-      time: '3h ago'
-    }
-  ],
-  comments: [
-    {
-      id: 'comm-1',
-      author: 'Sarah Chen',
-      role: 'Principal Architect',
-      avatar: 'https://lh3.googleusercontent.com/aida/AEtjO1XIhTzY3eUe08iU9h0fR4lC7-FjQ46i4H_8P0Gj3oPzRjP7sYk=s96-c',
-      time: '2h ago',
-      text: 'Checked the WAL benchmark PR. Look at checkpoint starvation if git polling interval drops below 5 seconds. On macOS APFS, simultaneous read-snapshots can delay truncation:',
-      codeSnippet: '// Guard against checkpoint starvation:\nsqlite3_wal_checkpoint_v2(db, "main", SQLITE_CHECKPOINT_PASSIVE, &log_size, &ckp_size);'
-    },
-    {
-      id: 'comm-2',
-      author: 'Alex Rivera',
-      role: 'Assignee',
+export const MOCK_JIRA_STORIES: JiraStory[] = [
+  {
+    key: 'CORE-1042',
+    title: 'Implement SQLite WAL Mode & In-Memory Cache Tier for Sandbox Engine',
+    status: 'in-progress',
+    priority: 'High Priority (P1)',
+    storyPoints: 5,
+    description: 'Transition Core Engine local persistence layer from CoreData/disk-bound storage to lightweight SQLite with WAL (Write-Ahead Logging) mode to maintain resident memory strictly under 20MB during rapid git diff streaming and high-frequency AST token updates.',
+    acceptanceCriteria: [
+      {
+        id: 'ac-1',
+        text: 'SQLite connection pool restricted to max 2 threads with mutex locks to eliminate IPC starvation.',
+        verified: true,
+        badge: 'Verified'
+      },
+      {
+        id: 'ac-2',
+        text: 'WAL checkpointing runs asynchronously in daemon thread every 60s without blocking UI render loop.',
+        verified: true,
+        badge: 'Verified'
+      },
+      {
+        id: 'ac-3',
+        text: 'Benchmarks verify < 15MB base resident memory footprint under simulation of 1,000 cached commits.',
+        verified: false,
+        badge: 'Pending Diff'
+      },
+      {
+        id: 'ac-4',
+        text: 'Unit tests for multi-process lock contention pass reliably on both macOS Sequoia and Windows 11 sandbox environments.',
+        verified: false,
+        badge: 'In Review'
+      }
+    ],
+    assignee: {
+      name: 'Alex Rivera',
       avatar: 'https://lh3.googleusercontent.com/aida/AEtjO1UXkE8QnEcgagLcItFqZG_e1ol7DiCr3syePWIDGlh72kKAvYDCXEVvI4jZ4C7DhwNY0B1bSDxkvXEQFmfVHpfGzZNkMnvbhY3CMjSTyNtG5yVP183PfuTT0IgFmw3Xirc5woV7GLCWBcqkKn3_fGtPP4fv9FBmKNNOqLrp4BZQ7Cs28a_gLlS4IfGblvp309U2BMx5WjReF3NQ2iM0A_Zz147SI2XvefaS7nwZwBm3D52l-kZD49yjkus3',
-      time: '1h ago',
-      text: 'Good catch. Added `PRAGMA wal_autocheckpoint=1000` to prevent uncommitted journal bloat. Updated PR #88 with the adjusted thread throttle diff.',
-      isAddressed: true
+      role: 'Staff Engineer / Assignee'
     },
-    {
-      id: 'comm-3',
-      author: 'DevPulse Sync Bot',
-      role: 'Automated Webhook',
-      avatar: '',
-      time: '45m ago',
-      text: 'Linked GitHub Commit `3a9f1b2` (Fix memory leak in SwiftUI Table View cell reuse during streaming) to CORE-1042.',
-      isBot: true
-    }
-  ]
-};
+    reporter: {
+      name: 'Sarah Chen',
+      avatar: 'https://lh3.googleusercontent.com/aida/AEtjO1XIhTzY3eUe08iU9h0fR4lC7-FjQ46i4H_8P0Gj3oPzRjP7sYk=s96-c'
+    },
+    sprint: 'Sprint 42',
+    sprintDaysRemaining: 4,
+    epic: 'EPIC-12: Core Performance',
+    components: ['#core-engine', '#sqlite', '#caching'],
+    fixVersion: 'v1.4.2-rc',
+    timeTracking: {
+      logged: 14,
+      estimated: 20
+    },
+    githubBranch: 'git/feature/sqlite-wal',
+    pullRequest: {
+      id: 'PR #88',
+      title: 'PR #88 — Core Memory Sandbox Pipeline',
+      checks: '4/4 checks passed',
+      target: 'main',
+      commitsCount: 6,
+      additions: 428,
+      deletions: 84
+    },
+    recentCommits: [
+      {
+        sha: '3a9f1b2',
+        message: 'Fix memory leak in SwiftUI Table View cell reuse during streaming',
+        time: '18m ago'
+      },
+      {
+        sha: '9d84c01',
+        message: 'Sign and notarize macOS build binaries for staging release',
+        time: '3h ago'
+      }
+    ],
+    comments: [
+      {
+        id: 'comm-1',
+        author: 'Sarah Chen',
+        role: 'Principal Architect',
+        avatar: 'https://lh3.googleusercontent.com/aida/AEtjO1XIhTzY3eUe08iU9h0fR4lC7-FjQ46i4H_8P0Gj3oPzRjP7sYk=s96-c',
+        time: '2h ago',
+        text: 'Checked the WAL benchmark PR. Look at checkpoint starvation if git polling interval drops below 5 seconds. On macOS APFS, simultaneous read-snapshots can delay truncation:',
+        codeSnippet: '// Guard against checkpoint starvation:\nsqlite3_wal_checkpoint_v2(db, "main", SQLITE_CHECKPOINT_PASSIVE, &log_size, &ckp_size);'
+      },
+      {
+        id: 'comm-2',
+        author: 'Alex Rivera',
+        role: 'Assignee',
+        avatar: 'https://lh3.googleusercontent.com/aida/AEtjO1UXkE8QnEcgagLcItFqZG_e1ol7DiCr3syePWIDGlh72kKAvYDCXEVvI4jZ4C7DhwNY0B1bSDxkvXEQFmfVHpfGzZNkMnvbhY3CMjSTyNtG5yVP183PfuTT0IgFmw3Xirc5woV7GLCWBcqkKn3_fGtPP4fv9FBmKNNOqLrp4BZQ7Cs28a_gLlS4IfGblvp309U2BMx5WjReF3NQ2iM0A_Zz147SI2XvefaS7nwZwBm3D52l-kZD49yjkus3',
+        time: '1h ago',
+        text: 'Good catch. Added `PRAGMA wal_autocheckpoint=1000` to prevent uncommitted journal bloat. Updated PR #88 with the adjusted thread throttle diff.',
+        isAddressed: true
+      },
+      {
+        id: 'comm-3',
+        author: 'DevPulse Sync Bot',
+        role: 'Automated Webhook',
+        avatar: '',
+        time: '45m ago',
+        text: 'Linked GitHub Commit `3a9f1b2` (Fix memory leak in SwiftUI Table View cell reuse during streaming) to CORE-1042.',
+        isBot: true
+      }
+    ]
+  },
+  {
+    key: 'CORE-1043',
+    title: 'Zero-Overhead IPC Transport Socket for Windows 11 Named Pipes',
+    status: 'code-review',
+    priority: 'Medium Priority (P2)',
+    storyPoints: 3,
+    description: 'Implement Windows 11 duplex Named Pipe listener with overlapped I/O to match macOS UNIX domain socket latency (<0.1ms).',
+    acceptanceCriteria: [
+      { id: 'ac-1043-1', text: 'Named pipe creation succeeds under non-elevated user token with proper DACLs.', verified: true, badge: 'Verified' },
+      { id: 'ac-1043-2', text: 'Overlapped I/O async completion routines zero CPU spin-wait.', verified: true, badge: 'Verified' }
+    ],
+    assignee: {
+      name: 'Alex Rivera',
+      avatar: 'https://lh3.googleusercontent.com/aida/AEtjO1UXkE8QnEcgagLcItFqZG_e1ol7DiCr3syePWIDGlh72kKAvYDCXEVvI4jZ4C7DhwNY0B1bSDxkvXEQFmfVHpfGzZNkMnvbhY3CMjSTyNtG5yVP183PfuTT0IgFmw3Xirc5woV7GLCWBcqkKn3_fGtPP4fv9FBmKNNOqLrp4BZQ7Cs28a_gLlS4IfGblvp309U2BMx5WjReF3NQ2iM0A_Zz147SI2XvefaS7nwZwBm3D52l-kZD49yjkus3',
+      role: 'Staff Engineer / Assignee'
+    },
+    reporter: {
+      name: 'Sarah Chen',
+      avatar: 'https://lh3.googleusercontent.com/aida/AEtjO1XIhTzY3eUe08iU9h0fR4lC7-FjQ46i4H_8P0Gj3oPzRjP7sYk=s96-c'
+    },
+    sprint: 'Sprint 42',
+    sprintDaysRemaining: 4,
+    epic: 'EPIC-12: Core Performance',
+    components: ['#windows', '#ipc', '#named-pipes'],
+    fixVersion: 'v1.4.2-rc',
+    timeTracking: { logged: 8, estimated: 12 },
+    githubBranch: 'git/feature/windows-ipc-pipes',
+    pullRequest: {
+      id: 'PR #487',
+      title: 'PR #487 — Zero-Overhead IPC Transport Socket',
+      checks: '1/1 approval',
+      target: 'main',
+      commitsCount: 3,
+      additions: 194,
+      deletions: 42
+    },
+    recentCommits: [
+      { sha: '7f91a2e', message: 'Add overlapped I/O event completion handles for Windows pipe', time: '1d ago' }
+    ],
+    comments: [
+      {
+        id: 'comm-1043-1',
+        author: 'Alex Rivera',
+        role: 'Assignee',
+        avatar: 'https://lh3.googleusercontent.com/aida/AEtjO1UXkE8QnEcgagLcItFqZG_e1ol7DiCr3syePWIDGlh72kKAvYDCXEVvI4jZ4C7DhwNY0B1bSDxkvXEQFmfVHpfGzZNkMnvbhY3CMjSTyNtG5yVP183PfuTT0IgFmw3Xirc5woV7GLCWBcqkKn3_fGtPP4fv9FBmKNNOqLrp4BZQ7Cs28a_gLlS4IfGblvp309U2BMx5WjReF3NQ2iM0A_Zz147SI2XvefaS7nwZwBm3D52l-kZD49yjkus3',
+        time: '5h ago',
+        text: 'Benchmark complete: 0.08ms average round-trip ping between client UI and Rust daemon on Windows 11.'
+      }
+    ]
+  }
+];
+
+export const MOCK_JIRA_STORY: JiraStory = MOCK_JIRA_STORIES[0];
 
 export const MOCK_GIT_EVENTS: GitEvent[] = [
   {

@@ -1,22 +1,31 @@
 import React, { useState } from 'react';
+import { OsMode } from '../types';
 
 interface HeaderProps {
   theme: 'dark' | 'light';
   onToggleTheme: (theme: 'dark' | 'light') => void;
+  osMode: OsMode;
+  onToggleOsMode: (mode: OsMode) => void;
   onManualSync: () => void;
   isSyncing: boolean;
   ramUsage: string;
   onOpenPreferences: () => void;
+  onOpenDocs: () => void;
+  onOpenWindowsBuild: () => void;
   showToast: (msg: string) => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   theme,
   onToggleTheme,
+  osMode,
+  onToggleOsMode,
   onManualSync,
   isSyncing,
   ramUsage,
   onOpenPreferences,
+  onOpenDocs,
+  onOpenWindowsBuild,
   showToast
 }) => {
   const [showNotifications, setShowNotifications] = useState(false);
@@ -28,27 +37,38 @@ export const Header: React.FC<HeaderProps> = ({
   ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-40 h-14 w-full flex items-center justify-between px-4">
-      {/* Window Controls & Workspace Brand */}
-      <div className="flex items-center space-x-3 w-64 shrink-0">
-        <div className="flex space-x-1.5 mr-2">
-          <div 
-            onClick={() => showToast('Minimized DevPulse window to macOS system tray')}
-            title="Close" 
-            className="w-3 h-3 rounded-full bg-[#ff5f57] border border-[#e0443e] cursor-pointer hover:opacity-80 transition-opacity"
-          />
-          <div 
-            onClick={() => showToast('DevPulse minimized to Dock')}
-            title="Minimize" 
-            className="w-3 h-3 rounded-full bg-[#febc2e] border border-[#d89e24] cursor-pointer hover:opacity-80 transition-opacity"
-          />
-          <div 
-            onClick={() => showToast('Full screen toggled')}
-            title="Maximize" 
-            className="w-3 h-3 rounded-full bg-[#28c840] border border-[#1aab29] cursor-pointer hover:opacity-80 transition-opacity"
-          />
-        </div>
-        <div className="flex items-center space-x-2 pl-2">
+    <header className="fixed top-0 left-0 right-0 z-40 h-14 w-full flex items-center justify-between px-4 border-b border-white/10 select-none">
+      {/* Left: Window Controls & Workspace Brand */}
+      <div className="flex items-center space-x-3 w-72 shrink-0">
+        {/* macOS Traffic Lights */}
+        {osMode === 'macos' && (
+          <div className="flex space-x-1.5 mr-2">
+            <div 
+              onClick={() => showToast('Minimized DevPulse window to system tray')}
+              title="Close" 
+              className="w-3 h-3 rounded-full bg-[#ff5f57] border border-[#e0443e] cursor-pointer hover:opacity-80 transition-opacity"
+            />
+            <div 
+              onClick={() => showToast('DevPulse minimized to Dock')}
+              title="Minimize" 
+              className="w-3 h-3 rounded-full bg-[#febc2e] border border-[#d89e24] cursor-pointer hover:opacity-80 transition-opacity"
+            />
+            <div 
+              onClick={() => showToast('Full screen toggled')}
+              title="Maximize" 
+              className="w-3 h-3 rounded-full bg-[#28c840] border border-[#1aab29] cursor-pointer hover:opacity-80 transition-opacity"
+            />
+          </div>
+        )}
+
+        {/* Windows 11 App Icon when in Windows mode */}
+        {osMode === 'windows' && (
+          <div className="flex items-center mr-1">
+            <span className="material-symbols-outlined text-[18px] text-primary">desktop_windows</span>
+          </div>
+        )}
+
+        <div className="flex items-center space-x-2 pl-1">
           <img 
             src="https://lh3.googleusercontent.com/aida/AEtjO1XK2cGMJjJ8Iyi0FJCw_L-iYeeHBRiqez45tz-imk6C6zTixWb3oqRdyzKgFB1Yf1RlDyAeFc4XtxC04E3_w7jSR7e7kGbRO_Rv0hGNMwEhxKRYKJGVc9HBdciWpJj23z0ldtaw-bB6hVBnQV8enw29Dt0b0jv3sXGy-vq1GeN7atbdRs-7CeMxULiXztolCT4OMLrAyJiTBH8SQE6GyOGikMzvjGwXK2v5sn0BOQlsKc6AgpV0_ygiHr1Q" 
             alt="DevPulse Logo" 
@@ -63,7 +83,7 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
 
-      {/* Active Status & Process Diagnostics */}
+      {/* Center: Realtime Telemetry Diagnostics */}
       <div className="hidden md:flex items-center space-x-3 text-xs">
         <div className="flex items-center space-x-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 font-mono text-[11px]">
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse-subtle"></span>
@@ -79,9 +99,29 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
 
-      {/* Right Controls: Interactive Theme Switcher, Quick Actions & Avatar */}
-      <div className="flex items-center space-x-3">
-        {/* Apple-style Interactive Segmented Glass Pill Theme Toggle */}
+      {/* Right Controls: Docs, Windows Build Hub, Theme Switcher, Sync & Profile */}
+      <div className="flex items-center space-x-2.5">
+        {/* Docs Button */}
+        <button
+          onClick={onOpenDocs}
+          title="Open DevPulse Documentation & Manual"
+          className="flex items-center space-x-1 px-2.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-on-surface transition active:scale-95"
+        >
+          <span className="material-symbols-outlined text-[16px] text-primary">menu_book</span>
+          <span className="hidden xl:inline">Docs</span>
+        </button>
+
+        {/* Windows 11 Build & Frame Button */}
+        <button
+          onClick={onOpenWindowsBuild}
+          title="Windows 11 Native Build & Frame Mode"
+          className="flex items-center space-x-1 px-2.5 py-1.5 rounded-xl bg-surface-container-high hover:bg-surface-container-highest border border-white/10 text-xs font-semibold text-on-surface transition active:scale-95"
+        >
+          <span className="material-symbols-outlined text-[16px] text-secondary">desktop_windows</span>
+          <span className="hidden lg:inline">{osMode === 'windows' ? 'Windows 11' : 'Win Build'}</span>
+        </button>
+
+        {/* Interactive Segmented Glass Pill Theme Toggle */}
         <div 
           onClick={() => onToggleTheme(theme === 'dark' ? 'light' : 'dark')}
           className="relative flex items-center p-1 rounded-full bg-black/20 dark:bg-black/40 border border-white/10 dark:border-white/10 shadow-[inset_0_1px_2px_rgba(0,0,0,0.3)] cursor-pointer select-none"
@@ -178,13 +218,13 @@ export const Header: React.FC<HeaderProps> = ({
           <span className={`material-symbols-outlined text-[16px] ${isSyncing ? 'animate-spin text-primary' : ''}`}>
             sync
           </span>
-          <span className="hidden lg:inline">Sync</span>
+          <span className="hidden xl:inline">Sync</span>
         </button>
 
         {/* User Profile Avatar */}
         <div 
           onClick={onOpenPreferences}
-          className="flex items-center space-x-2 pl-2 border-l border-white/10 cursor-pointer hover:opacity-90 transition-opacity"
+          className="flex items-center space-x-2 pl-1 border-l border-white/10 cursor-pointer hover:opacity-90 transition-opacity"
           title="Open Profile & Preferences"
         >
           <img 
@@ -197,6 +237,33 @@ export const Header: React.FC<HeaderProps> = ({
             <span className="text-[10px] text-outline leading-tight">Staff Engineer</span>
           </div>
         </div>
+
+        {/* Windows 11 Fluent Right Window Chrome */}
+        {osMode === 'windows' && (
+          <div className="flex items-center space-x-1 pl-2 border-l border-white/10">
+            <button
+              onClick={() => showToast('Minimized DevPulse to Windows Taskbar')}
+              className="w-7 h-7 rounded hover:bg-white/10 flex items-center justify-center text-outline hover:text-on-surface transition"
+              title="Minimize"
+            >
+              <span className="material-symbols-outlined text-[14px]">remove</span>
+            </button>
+            <button
+              onClick={() => showToast('Maximized DevPulse Window')}
+              className="w-7 h-7 rounded hover:bg-white/10 flex items-center justify-center text-outline hover:text-on-surface transition"
+              title="Maximize"
+            >
+              <span className="material-symbols-outlined text-[14px]">crop_square</span>
+            </button>
+            <button
+              onClick={() => showToast('Closed DevPulse to System Tray')}
+              className="w-7 h-7 rounded hover:bg-red-500 hover:text-white flex items-center justify-center text-outline transition"
+              title="Close"
+            >
+              <span className="material-symbols-outlined text-[14px]">close</span>
+            </button>
+          </div>
+        )}
       </div>
     </header>
   );
